@@ -205,4 +205,4 @@ ani = animation.ArtistAnimation(fig, ims, interval=250, repeat_delay=250, blit=T
 f = r'./animation.gif'
 writergif = animation.PillowWriter(fps=30) 
 ani.save(f, writer=writergif)
-print(img_list)
+# print(img_list)
