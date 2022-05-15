@@ -26,7 +26,7 @@ os.path.exists(path)
 norm=((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 batch_size = 64
 image_size = 64
-epochs = 200
+epochs = 1
 
 transf = transforms.Compose([
     transforms.Resize(image_size),
@@ -129,6 +129,8 @@ sample_dir = './generated'+str(args.device)
 os.makedirs(sample_dir, exist_ok=True)
 
 avg_dl_time = 0.0
+avg_g_time = 0.0
+avg_d_time = 0.0
 
 start = time.monotonic()
 for epoch in range(epochs):
@@ -146,6 +148,8 @@ for epoch in range(epochs):
         real_cpu = data[0].to(device)
         b_size = real_cpu.size(0)
         label = torch.full((b_size,), real_label, dtype=torch.float, device=device)
+        # Discriminator start
+        dis_start = time.monotonic()
         output = modelD(real_cpu).view(-1)
         errD_real = criterion(output, label)
         errD_real.backward()
@@ -159,7 +163,13 @@ for epoch in range(epochs):
         D_G_z1 += output.mean().item()
         errD = errD_real + errD_fake
         optimizerD.step()
+        #Discriminator end
+        dis_end = time.monotonic()
+        avg_d_time += (dis_end - dis_start)
+        
 
+        #Generator start
+        gen_start = time.monotonic()
         modelG.zero_grad()
         label.fill_(real_label)
         output = modelD(fake).view(-1)
@@ -167,7 +177,10 @@ for epoch in range(epochs):
         errG.backward()
         D_G_z2 += output.mean().item()
         optimizerG.step()
-        
+        gen_end = time.monotonic()
+        #Generator end
+        avg_g_time += (gen_end - gen_start)
+
         g_loss += errG.item()
         d_loss += errD.item()
         total += b_size
@@ -204,6 +217,9 @@ for epoch in range(epochs):
     save_image(unnorm(fake, *norm), os.path.join(sample_dir, fake_fname), nrow=8)
 
 print("Average data loading time: ", avg_dl_time/epochs)
+
+print("Average time spent in generator: ", avg_g_time/epochs)
+print("Average time spent in discriminator: ", avg_d_time/epochs)
 
 torch.save(modelG.state_dict(), 'checkpoint/'+str(args.device)+'G.pth')
 torch.save(modelD.state_dict(), 'checkpoint/'+str(args.device)+'D.pth')
