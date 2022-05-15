@@ -187,6 +187,8 @@ for epoch in range(epochs):
     fake_fname = 'generated-images-{0:0=4d}.png'.format(epoch+1)
     save_image(unnorm(fake, *norm), os.path.join(sample_dir, fake_fname), nrow=8)
 
+torch.save(modelG.state_dict(), 'G.pth')
+torch.save(modelD.state_dict(), 'D.pth')
     
 print('Finished Training')
 end = time.monotonic()
