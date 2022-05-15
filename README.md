@@ -16,3 +16,8 @@ animation.gif - A GIF file to show the progress of images generated over 200 epo
 dcgan.py - Main Python file to run in sbatch which contains the training logic. <br><br>
 slowed_down_looped_once.gif - animation.gif slowed down and looped once for better visual understanding. <br><br>
 test.out - Output file generated using running of sbatch. <br><br>
+training.sbatch - Sbatch file to run on GPU. <br><br>
+
+<h3> <u> HOW TO RUN: </u> </h3>
+1. Run the following sbatch file in your GPU - sbatch training.sbatch
+2. Run the following command for CPU - python dcgan.py --device cpu
