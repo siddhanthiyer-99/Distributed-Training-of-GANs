@@ -11,8 +11,8 @@ We implement training strategies to help improve these bottlenecks to improve th
 ![image](https://user-images.githubusercontent.com/47019139/168489567-050c0a44-8253-4208-8270-1f178e87d20c.png)
 
 <h3> <u> REPOSITORY: </u> </h3>
-GDLoss.png - Graph plot of the Generator Loss and the Discriminator Loss of a GAN. <br>
-animation.gif - A GIF file to show the progress of images generated over 200 epochs. <br>
-dcgan.py - Main Python file to run in sbatch which contains the training logic. <br>
-slowed_down_looped_once.gif - animation.gif slowed down and looped once for better visual understanding. <br>
-test.out - Output file generated using running of sbatch. <br>
+GDLoss.png - Graph plot of the Generator Loss and the Discriminator Loss of a GAN. <br><br>
+animation.gif - A GIF file to show the progress of images generated over 200 epochs. <br><br>
+dcgan.py - Main Python file to run in sbatch which contains the training logic. <br><br>
+slowed_down_looped_once.gif - animation.gif slowed down and looped once for better visual understanding. <br><br>
+test.out - Output file generated using running of sbatch. <br><br>
