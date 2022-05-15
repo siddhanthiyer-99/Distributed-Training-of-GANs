@@ -10,6 +10,12 @@ from torchvision import datasets
 import torchvision.utils as vutils
 import time
 from torchvision.utils import save_image
+import argparse
+
+parser = argparse.ArgumentParser(description='PyTorch Abstract Art Training')
+parser.add_argument('--device', default='gpu', type=str, help='Device specs')
+args = parser.parse_args()
+
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(device)
@@ -119,8 +125,10 @@ img_list = []
 G_losses, D_losses = [], []
 total = 0
 
-sample_dir = './generated_CPU'
+sample_dir = './generated'+str(args.device)
 os.makedirs(sample_dir, exist_ok=True)
+
+avg_dl_time = 0.0
 
 start = time.monotonic()
 for epoch in range(epochs):
@@ -130,8 +138,10 @@ for epoch in range(epochs):
     D_G_z1 = 0.0
     D_G_z2 = 0.0
     
+    calc_time = 0.0
+    dataloadingtime_start = time.monotonic ()
     for i, data in enumerate(dataloader, 0):
-        
+        t0 = time.monotonic()
         modelD.zero_grad()
         real_cpu = data[0].to(device)
         b_size = real_cpu.size(0)
@@ -161,7 +171,13 @@ for epoch in range(epochs):
         g_loss += errG.item()
         d_loss += errD.item()
         total += b_size
-        
+        t1 = time.monotonic()
+        calc_time += (t1-t0)
+
+    dataloadingtime_end = time.monotonic()
+    dataloadingtime = (dataloadingtime_end - dataloadingtime_start) - calc_time
+    avg_dl_time += dataloadingtime
+
     avg_g_loss = g_loss / total
     G_losses.append(avg_g_loss)
     avg_d_loss = d_loss / total
@@ -170,7 +186,7 @@ for epoch in range(epochs):
     avg_D_x = D_x / len(dataloader)
     avg_D_G_z1 = D_G_z1 / len(dataloader)
     avg_D_G_z2 = D_G_z2 / len(dataloader)
-    
+
     print('Epoch: {} \tDiscriminator Loss: {:.6f} \tGenerator Loss: {:.6f} \tD(x): {:.6f} \tD(G(z)): {:.6f} / {:.6f}'.format(
         epoch + 1,
         avg_d_loss,
@@ -187,13 +203,15 @@ for epoch in range(epochs):
     fake_fname = 'generated-images-{0:0=4d}.png'.format(epoch+1)
     save_image(unnorm(fake, *norm), os.path.join(sample_dir, fake_fname), nrow=8)
 
-torch.save(modelG.state_dict(), 'checkpoints/G.pth')
-torch.save(modelD.state_dict(), 'checkpoints/D.pth')
+print("Average data loading time: ", dataloadingtime/epochs)
+
+torch.save(modelG.state_dict(), 'checkpoint/'+str(args.device)+'G.pth')
+torch.save(modelD.state_dict(), 'checkpoint/'+str(args.device)+'D.pth')
     
 print('Finished Training')
 end = time.monotonic()
 
-print("Time taken for 200 epochs: ", end-start)
+print("Time taken for" +str(epochs)+" epochs: ", end-start)
 
 plt.figure(figsize=(20,12))
 plt.plot(G_losses,label="Generator")
@@ -201,18 +219,16 @@ plt.plot(D_losses,label="Discriminator")
 plt.xlabel("Epoch")
 plt.ylabel("Loss")
 plt.legend()
-plt.savefig('GDLoss.png')
+plt.savefig(str(args.device)+'_GDLoss.png')
 plt.show()
 
 
 import matplotlib.animation as animation
-from IPython.display import HTML
-
 fig = plt.figure(figsize=(8, 8))
 plt.axis("off")
 ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list[::6]]
 ani = animation.ArtistAnimation(fig, ims, interval=250, repeat_delay=250, blit=True)
-f = r'./CPUanimation.gif'
+f = './'+str(args.device)+'animation.gif'
 writergif = animation.PillowWriter(fps=30) 
 ani.save(f, writer=writergif)
 # print(img_list)
