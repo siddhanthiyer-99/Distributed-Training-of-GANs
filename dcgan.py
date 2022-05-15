@@ -221,6 +221,9 @@ print("Average data loading time: ", avg_dl_time/epochs)
 print("Average time spent in generator: ", avg_g_time/epochs)
 print("Average time spent in discriminator: ", avg_d_time/epochs)
 
+checkpoint_path = './checkpoint'
+os.makedirs(sample_dir, exist_ok=True)
+
 torch.save(modelG.state_dict(), 'checkpoint/'+str(args.device)+'G.pth')
 torch.save(modelD.state_dict(), 'checkpoint/'+str(args.device)+'D.pth')
     
