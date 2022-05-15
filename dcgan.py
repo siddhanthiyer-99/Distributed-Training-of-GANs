@@ -9,6 +9,7 @@ import seaborn as sns
 from torchvision import datasets
 import torchvision.utils as vutils
 import time
+from torchvision.utils import save_image
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(device)
@@ -118,6 +119,9 @@ img_list = []
 G_losses, D_losses = [], []
 total = 0
 
+sample_dir = './generated'
+os.makedirs(sample_dir, exist_ok=True)
+
 start = time.monotonic()
 for epoch in range(epochs):
     g_loss = 0.0
@@ -179,6 +183,10 @@ for epoch in range(epochs):
     with torch.no_grad():
         fake = modelG(fixed_noise).detach().cpu()
     img_list.append(vutils.make_grid(unnorm(fake, *norm), padding=2, normalize=True))
+
+    fake_fname = 'generated-images-{0:0=4d}.png'.format(epoch+1)
+    save_image(unnorm(fake, *norm), os.path.join(sample_dir, fake_fname), nrow=8)
+
     
 print('Finished Training')
 end = time.monotonic()
