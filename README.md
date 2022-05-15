@@ -21,3 +21,6 @@ training.sbatch - Sbatch file to run on GPU. <br><br>
 <h3> <u> HOW TO RUN: </u> </h3>
 1. Run the following command for GPU - sbatch training.sbatch <br><br>
 2. Run the following command for CPU - python dcgan.py --device cpu <br><br>
+
+<h3> <u> RESULTS: </u> </h3>
+TBD
