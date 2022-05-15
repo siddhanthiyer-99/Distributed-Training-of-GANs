@@ -203,7 +203,7 @@ for epoch in range(epochs):
     fake_fname = 'generated-images-{0:0=4d}.png'.format(epoch+1)
     save_image(unnorm(fake, *norm), os.path.join(sample_dir, fake_fname), nrow=8)
 
-print("Average data loading time: ", dataloadingtime/epochs)
+print("Average data loading time: ", avg_dl_time/epochs)
 
 torch.save(modelG.state_dict(), 'checkpoint/'+str(args.device)+'G.pth')
 torch.save(modelD.state_dict(), 'checkpoint/'+str(args.device)+'D.pth')
