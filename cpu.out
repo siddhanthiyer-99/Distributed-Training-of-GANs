@@ -1,5 +1,4 @@
 cpu
-Epoch: 1 	Discriminator Loss: 0.007258 	Generator Loss: 0.087516 	D(x): 0.834168 	D(G(z)): 0.188512 / 0.011990
-Epoch: 2 	Discriminator Loss: 0.000802 	Generator Loss: 0.061994 	D(x): 0.954559 	D(G(z)): 0.046909 / 0.000603
-Epoch: 3 	Discriminator Loss: 0.000252 	Generator Loss: 0.041508 	D(x): 0.978283 	D(G(z)): 0.023667 / 0.000553
-slurmstepd: error: *** JOB 19608394 ON gv002 CANCELLED AT 2022-05-15T16:19:07 ***
+Epoch: 1 	Discriminator Loss: 0.008574 	Generator Loss: 0.085331 	D(x): 0.809226 	D(G(z)): 0.214628 / 0.014452
+Epoch: 2 	Discriminator Loss: 0.000912 	Generator Loss: 0.058425 	D(x): 0.948874 	D(G(z)): 0.056401 / 0.000892
+slurmstepd: error: *** JOB 19608667 ON gr071 CANCELLED AT 2022-05-15T16:38:11 ***

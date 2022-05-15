@@ -1,9 +1,6 @@
 cuda
-Epoch: 1 	Discriminator Loss: 0.008050 	Generator Loss: 0.084733 	D(x): 0.823764 	D(G(z)): 0.204856 / 0.015625
-Epoch: 2 	Discriminator Loss: 0.000943 	Generator Loss: 0.059181 	D(x): 0.947628 	D(G(z)): 0.054621 / 0.000876
-Epoch: 3 	Discriminator Loss: 0.000797 	Generator Loss: 0.040459 	D(x): 0.942888 	D(G(z)): 0.052057 / 0.003015
-Epoch: 4 	Discriminator Loss: 0.001568 	Generator Loss: 0.026071 	D(x): 0.868602 	D(G(z)): 0.127494 / 0.011640
-Epoch: 5 	Discriminator Loss: 0.000645 	Generator Loss: 0.020739 	D(x): 0.922942 	D(G(z)): 0.081327 / 0.004123
-Epoch: 6 	Discriminator Loss: 0.000300 	Generator Loss: 0.018215 	D(x): 0.951915 	D(G(z)): 0.049018 / 0.001591
-Epoch: 7 	Discriminator Loss: 0.000195 	Generator Loss: 0.015725 	D(x): 0.964645 	D(G(z)): 0.034147 / 0.001339
-slurmstepd: error: *** JOB 19608396 ON gr011 CANCELLED AT 2022-05-15T16:19:07 ***
+Epoch: 1 	Discriminator Loss: 0.007706 	Generator Loss: 0.083999 	D(x): 0.832010 	D(G(z)): 0.198910 / 0.016450
+Epoch: 2 	Discriminator Loss: 0.001111 	Generator Loss: 0.077229 	D(x): 0.948306 	D(G(z)): 0.069479 / 0.000874
+Epoch: 3 	Discriminator Loss: 0.000612 	Generator Loss: 0.059138 	D(x): 0.950580 	D(G(z)): 0.043134 / 0.000890
+Epoch: 4 	Discriminator Loss: 0.000546 	Generator Loss: 0.030182 	D(x): 0.947653 	D(G(z)): 0.052898 / 0.001986
+slurmstepd: error: *** JOB 19608668 ON gr018 CANCELLED AT 2022-05-15T16:38:11 ***

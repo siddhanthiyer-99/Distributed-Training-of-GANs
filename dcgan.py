@@ -26,7 +26,7 @@ os.path.exists(path)
 norm=((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 batch_size = 64
 image_size = 64
-epochs = 1
+epochs = 200
 
 transf = transforms.Compose([
     transforms.Resize(image_size),
