@@ -119,7 +119,7 @@ img_list = []
 G_losses, D_losses = [], []
 total = 0
 
-sample_dir = './generated'
+sample_dir = './generated_CPU'
 os.makedirs(sample_dir, exist_ok=True)
 
 start = time.monotonic()
@@ -187,8 +187,8 @@ for epoch in range(epochs):
     fake_fname = 'generated-images-{0:0=4d}.png'.format(epoch+1)
     save_image(unnorm(fake, *norm), os.path.join(sample_dir, fake_fname), nrow=8)
 
-torch.save(modelG.state_dict(), 'G.pth')
-torch.save(modelD.state_dict(), 'D.pth')
+torch.save(modelG.state_dict(), 'checkpoints/G.pth')
+torch.save(modelD.state_dict(), 'checkpoints/D.pth')
     
 print('Finished Training')
 end = time.monotonic()
@@ -212,7 +212,7 @@ fig = plt.figure(figsize=(8, 8))
 plt.axis("off")
 ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list[::6]]
 ani = animation.ArtistAnimation(fig, ims, interval=250, repeat_delay=250, blit=True)
-f = r'./animation.gif'
+f = r'./CPUanimation.gif'
 writergif = animation.PillowWriter(fps=30) 
 ani.save(f, writer=writergif)
 # print(img_list)
