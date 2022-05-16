@@ -19,7 +19,7 @@ parser.add_argument('--ex', default="test", type=str, help='name')
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 args = parser.parse_args()
-path = './FakeFaces'
+path = './abstract_art'
 os.path.exists(path)
 
 norm=((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
