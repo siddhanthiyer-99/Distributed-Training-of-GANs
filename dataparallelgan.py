@@ -19,13 +19,13 @@ parser.add_argument('--ex', default="test", type=str, help='name')
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 args = parser.parse_args()
-path = './archive'
+path = './FakeFaces'
 os.path.exists(path)
 
 norm=((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 batch_size = 64
 image_size = 64
-epochs = 200
+epochs = 150
 
 transf = transforms.Compose([
     transforms.Resize(image_size),
