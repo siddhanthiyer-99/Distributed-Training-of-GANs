@@ -12,3 +12,9 @@ generatedddp_art_rtx8000
 generatedddp_art_v100
 generatedddp_ff_rtx8000
 generatedddp_ff_v100
+ddp_art_v100D.pth
+ddp_art_v100G.pth
+testanimation.gif
+testD.pth
+testG.pth
+testGDLoss.png
