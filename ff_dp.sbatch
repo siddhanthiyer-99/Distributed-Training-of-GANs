@@ -3,8 +3,8 @@
 #SBATCH --nodes=1                        
 #SBATCH --ntasks-per-node=1              
 #SBATCH --cpus-per-task=16               
-#SBATCH --time=04:00:00
-#SBATCH --mem=16GB
+#SBATCH --time=05:00:00
+#SBATCH --mem=4GB
 #SBATCH --job-name=ff_dp
 #SBATCH --output=ff_dp.out
 #SBATCH --gres=gpu:rtx8000:1 
