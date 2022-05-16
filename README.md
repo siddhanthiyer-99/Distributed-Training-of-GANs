@@ -32,4 +32,5 @@ v100animation.gif - A GIF file to show the progress of images generated over 200
 
 ![image](https://user-images.githubusercontent.com/47019139/168666005-45aef600-f980-4e4b-8ba6-d560f416bb94.png)
 
-![animation](https://user-images.githubusercontent.com/47019139/168666069-8fdbdb1a-6ef2-4aae-ab25-010d89a0b631.gif)
+![slowed_down_looped_once](https://user-images.githubusercontent.com/47019139/168666158-5f1450e6-6c74-476f-8637-1dfc7f256ace.gif)
+
