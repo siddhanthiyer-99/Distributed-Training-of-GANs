@@ -128,7 +128,9 @@ total = 0
 
 sample_dir = './generated'+str(args.ex)
 os.makedirs(sample_dir, exist_ok=True)
-
+avg_dl_time = 0.0
+avg_g_time = 0.0
+avg_d_time = 0.0
 start = time.monotonic()
 for epoch in range(epochs):
     g_loss = 0.0
@@ -136,13 +138,16 @@ for epoch in range(epochs):
     D_x = 0.0
     D_G_z1 = 0.0
     D_G_z2 = 0.0
-    
+    calc_time = 0.0
+    dataloadingtime_start = time.monotonic ()
     for i, data in enumerate(dataloader, 0):
-        
+        t0 = time.monotonic()
         modelD.zero_grad()
         real_cpu = data[0].to(device)
         b_size = real_cpu.size(0)
         label = torch.full((b_size,), real_label, dtype=torch.float, device=device)
+        # Discriminator start
+        dis_start = time.monotonic()
         output = modelD(real_cpu).view(-1)
         errD_real = criterion(output, label)
         errD_real.backward()
@@ -156,7 +161,12 @@ for epoch in range(epochs):
         D_G_z1 += output.mean().item()
         errD = errD_real + errD_fake
         optimizerD.step()
+        #Discriminator end
+        dis_end = time.monotonic()
+        avg_d_time += (dis_end - dis_start)
 
+        #Generator start
+        gen_start = time.monotonic()
         modelG.zero_grad()
         label.fill_(real_label)
         output = modelD(fake).view(-1)
@@ -164,11 +174,20 @@ for epoch in range(epochs):
         errG.backward()
         D_G_z2 += output.mean().item()
         optimizerG.step()
+        gen_end = time.monotonic()
+        #Generator end
+        avg_g_time += (gen_end - gen_start)
         
         g_loss += errG.item()
         d_loss += errD.item()
         total += b_size
+        t1 = time.monotonic()
+        calc_time += (t1-t0)
         
+    dataloadingtime_end = time.monotonic()
+    dataloadingtime = (dataloadingtime_end - dataloadingtime_start) - calc_time
+    avg_dl_time += dataloadingtime
+    
     avg_g_loss = g_loss / total
     G_losses.append(avg_g_loss)
     avg_d_loss = d_loss / total
@@ -197,9 +216,15 @@ for epoch in range(epochs):
     
 print('Finished Training')
 end = time.monotonic()
+
+print("Average data loading time: ", avg_dl_time/epochs)
+print("Average time spent in generator: ", avg_g_time/epochs)
+print("Average time spent in discriminator: ", avg_d_time/epochs)
+
 torch.save(modelG.state_dict(), './' + str(args.ex)+'G.pth')
 torch.save(modelD.state_dict(), './' + str(args.ex)+'D.pth')
-print("Time taken for 200 epochs: ", end-start)
+# print("Time taken for 200 epochs: ", end-start)
+print("Time taken for" +str(epochs)+" epochs: ", end-start)
 
 plt.figure(figsize=(20,12))
 plt.plot(G_losses,label="Generator")
@@ -207,7 +232,7 @@ plt.plot(D_losses,label="Discriminator")
 plt.xlabel("Epoch")
 plt.ylabel("Loss")
 plt.legend()
-plt.savefig('GDLoss.png')
+plt.savefig(str(args.ex)+'GDLoss.png')
 plt.show()
 
 
@@ -218,7 +243,7 @@ fig = plt.figure(figsize=(8, 8))
 plt.axis("off")
 ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list[::6]]
 ani = animation.ArtistAnimation(fig, ims, interval=250, repeat_delay=250, blit=True)
-f = r'./animation.gif'
+f = './'+str(args.ex)+'animation.gif'
 writergif = animation.PillowWriter(fps=30) 
-git pu.save(f, writer=writergif)
+ani.save(f, writer=writergif)
 # print(img_list)
