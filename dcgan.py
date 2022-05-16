@@ -26,7 +26,7 @@ os.path.exists(path)
 norm=((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 batch_size = 64
 image_size = 64
-epochs = 1
+epochs = 200
 
 transf = transforms.Compose([
     transforms.Resize(image_size),
@@ -220,6 +220,9 @@ print("Average data loading time: ", avg_dl_time/epochs)
 
 print("Average time spent in generator: ", avg_g_time/epochs)
 print("Average time spent in discriminator: ", avg_d_time/epochs)
+
+checkpoint_path = './checkpoint'
+os.makedirs(sample_dir, exist_ok=True)
 
 torch.save(modelG.state_dict(), 'checkpoint/'+str(args.device)+'G.pth')
 torch.save(modelD.state_dict(), 'checkpoint/'+str(args.device)+'D.pth')

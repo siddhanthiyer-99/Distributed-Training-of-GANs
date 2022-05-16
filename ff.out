@@ -1,0 +1,7 @@
+cuda
+Epoch: 1 	Discriminator Loss: 0.001353 	Generator Loss: 0.113615 	D(x): 0.977320 	D(G(z)): 0.044219 / 0.003608
+Average data loading time:  182.20171551406384
+Average time spent in generator:  1.8718292601406574
+Average time spent in discriminator:  4.55855755880475
+Finished Training
+Time taken for1 epochs:  189.16202803514898
