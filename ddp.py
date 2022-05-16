@@ -15,7 +15,7 @@ import torch.distributed as dist
 import torch.nn as nn
 import torch.optim as optim
 import torch.multiprocessing as mp
-
+import matplotlib.animation as animation
 from torch.nn.parallel import DistributedDataParallel as DDP
 
 def setup(rank, world_size):
@@ -97,7 +97,7 @@ class Discriminator(nn.Module):
 def callfunc(rank, world_size):
     setup(rank, world_size)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print(device)
+    print("Device and Rank: ", device, rank)
 
 
     device_ids = [0]
@@ -224,14 +224,15 @@ def callfunc(rank, world_size):
         avg_D_G_z1 = D_G_z1 / len(dataloader)
         avg_D_G_z2 = D_G_z2 / len(dataloader)
         
-        print('Epoch: {} \tDiscriminator Loss: {:.6f} \tGenerator Loss: {:.6f} \tD(x): {:.6f} \tD(G(z)): {:.6f} / {:.6f}'.format(
-            epoch + 1,
-            avg_d_loss,
-            avg_g_loss,
-            avg_D_x,
-            avg_D_G_z1,
-            avg_D_G_z2
-        ))
+        if(rank==0): 
+            print('Epoch: {} \tDiscriminator Loss: {:.6f} \tGenerator Loss: {:.6f} \tD(x): {:.6f} \tD(G(z)): {:.6f} / {:.6f}'.format(
+                epoch + 1,
+                avg_d_loss,
+                avg_g_loss,
+                avg_D_x,
+                avg_D_G_z1,
+                avg_D_G_z2
+            ))
         
         with torch.no_grad():
             fake = modelG(fixed_noise).detach().cpu()
@@ -240,40 +241,41 @@ def callfunc(rank, world_size):
         fake_fname = 'generated-images-{0:0=4d}.png'.format(epoch+1)
         save_image(unnorm(fake, *norm), os.path.join(sample_dir, fake_fname), nrow=8)
 
-        
-    print('Finished Training')
+    if(rank==0):     
+        print('Finished Training')
     end = time.monotonic()
 
-    print("Average data loading time: ", avg_dl_time/epochs)
-    print("Average time spent in generator: ", avg_g_time/epochs)
-    print("Average time spent in discriminator: ", avg_d_time/epochs)
+    if(rank==0): 
+        print("Average data loading time: ", avg_dl_time/epochs)
+        print("Average time spent in generator: ", avg_g_time/epochs)
+        print("Average time spent in discriminator: ", avg_d_time/epochs)
 
-    torch.save(modelG.state_dict(), './' + str(args.ex)+'G.pth')
-    torch.save(modelD.state_dict(), './' + str(args.ex)+'D.pth')
-    # print("Time taken for 200 epochs: ", end-start)
-    print("Time taken for" +str(epochs)+" epochs: ", end-start)
+        torch.save(modelG.state_dict(), './' + str(args.ex)+'G.pth')
+        torch.save(modelD.state_dict(), './' + str(args.ex)+'D.pth')
+        # print("Time taken for 200 epochs: ", end-start)
+        print("Time taken for" +str(epochs)+" epochs: ", end-start)
 
-    plt.figure(figsize=(20,12))
-    plt.plot(G_losses,label="Generator")
-    plt.plot(D_losses,label="Discriminator")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.legend()
-    plt.savefig(str(args.ex)+'GDLoss.png')
-    plt.show()
+        plt.figure(figsize=(20,12))
+        plt.plot(G_losses,label="Generator")
+        plt.plot(D_losses,label="Discriminator")
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.legend()
+        plt.savefig(str(args.ex)+'GDLoss.png')
+        plt.show()
 
 
-    import matplotlib.animation as animation
+    
     # from IPython.display import HTML
 
-    fig = plt.figure(figsize=(8, 8))
-    plt.axis("off")
-    ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list[::6]]
-    ani = animation.ArtistAnimation(fig, ims, interval=250, repeat_delay=250, blit=True)
-    f = './'+str(args.ex)+'animation.gif'
-    writergif = animation.PillowWriter(fps=30) 
-    ani.save(f, writer=writergif)
-    # print(img_list)
+        fig = plt.figure(figsize=(8, 8))
+        plt.axis("off")
+        ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list[::6]]
+        ani = animation.ArtistAnimation(fig, ims, interval=250, repeat_delay=250, blit=True)
+        f = './'+str(args.ex)+'animation.gif'
+        writergif = animation.PillowWriter(fps=30) 
+        ani.save(f, writer=writergif)
+        # print(img_list)
 
 def run_demo(callfunc, world_size):
     mp.spawn(callfunc,
