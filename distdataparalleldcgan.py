@@ -100,7 +100,7 @@ def example(rank, world_size):
     # Create Data loader
     torch.cuda.set_device(rank)
     norm=((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    batch_size = 64
+    batch_size = 128
     image_size = 64
     epochs = 5
 

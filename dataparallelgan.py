@@ -23,9 +23,9 @@ path = './abstract_art'
 os.path.exists(path)
 
 norm=((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-batch_size = 64
+batch_size = 128
 image_size = 64
-epochs = 150
+epochs = 10
 
 transf = transforms.Compose([
     transforms.Resize(image_size),
